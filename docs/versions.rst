@@ -70,10 +70,10 @@ On my machine, running this currently gives::
 
    Internally, this is a wrapper around a `struct plugin_gcc_version`
 
-.. py:data:: gcc.GCC_VERSION
+.. py:data:: gcc.GCCPLUGINS_API_VERSION
 
    (int) This corresponds to the value of GCC_VERSION within GCC's internal
-   code: (MAJOR * 1000) + MINOR:
+   code of the GCC plugin target: (MAJOR * 1000) + MINOR:
 
    ===========   ========================
    GCC version   Value of gcc.GCC_VERSION

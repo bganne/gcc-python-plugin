@@ -42,7 +42,7 @@ int plugin_is_GPL_compatible;
 //#include "opts.h"
 
 /* "maybe_get_identifier" was moved from tree.h to stringpool.h in 4.9 */
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 #include "stringpool.h"
 #endif
 
@@ -572,7 +572,7 @@ PyGcc_init_gcc_module(struct plugin_name_args *plugin_info)
     PyModule_AddIntMacro(PyGcc_globals.module, PROP_gimple_lcf);
     PyModule_AddIntMacro(PyGcc_globals.module, PROP_gimple_leh);
     PyModule_AddIntMacro(PyGcc_globals.module, PROP_cfg);
-#if (GCC_VERSION >= 4008)
+#if (GCCPLUGINS_API_VERSION >= 4008)
     /* PROP_referenced_vars went away in GCC 4.8 (in r190067) */
 #else
     PyModule_AddIntMacro(PyGcc_globals.module, PROP_referenced_vars);
@@ -584,7 +584,7 @@ PyGcc_init_gcc_module(struct plugin_name_args *plugin_info)
     PyModule_AddIntMacro(PyGcc_globals.module, PROP_cfglayout);
     PyModule_AddIntMacro(PyGcc_globals.module, PROP_gimple_lcx);
 
-    PyModule_AddIntMacro(PyGcc_globals.module, GCC_VERSION);
+    PyModule_AddIntMacro(PyGcc_globals.module, GCCPLUGINS_API_VERSION);
 
     /* Success: */
     return 1;
@@ -885,7 +885,7 @@ PyGcc_int_from_decimal_string_buffer(const char *buf)
 #endif
 }
 
-#if (GCC_VERSION < 5000)
+#if (GCCPLUGINS_API_VERSION < 5000)
 /*
   "double_int" is declared in gcc/double-int.h as a pair of HOST_WIDE_INT.
   These in turn are defined in gcc/hwint.h as a #define to one of "long",
@@ -919,7 +919,7 @@ PyGcc_int_from_double_int(double_int di, bool is_unsigned)
     return PyGcc_int_from_decimal_string_buffer(buf);
 }
 
-#endif /* #if (GCC_VERSION < 5000) */
+#endif /* #if (GCCPLUGINS_API_VERSION < 5000) */
 
 /*
    GCC's headers "poison" strdup to make it unavailable, so we provide our own.

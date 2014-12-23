@@ -54,7 +54,7 @@ dump_generic_node (pretty_printer *buffer, tree node, int spc, int flags,
 extern bool ggc_force_collect;
 
 /* From c-family/c-common.h */
-#if GCC_VERSION < 4008
+#if GCCPLUGINS_API_VERSION < 4008
 extern tree c_sizeof_or_alignof_type (location_t, tree, bool, int);
 #endif
 

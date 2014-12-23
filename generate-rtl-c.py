@@ -21,7 +21,7 @@ from cpybuilder import *
 from testcpychecker import get_gcc_version
 from wrapperbuilder import PyGccWrapperTypeObject
 
-GCC_VERSION = get_gcc_version()
+GCCPLUGINS_API_VERSION = get_gcc_version()
 
 cu = CompilationUnit()
 cu.add_include('gcc-python.h')
@@ -58,7 +58,7 @@ PyGccRtl_get_block(struct PyGccRtl *self, void *closure)
 """)
     '''
     getsettable = PyGetSetDefTable('PyGccRtl_getset_table', [])
-    if GCC_VERSION < 5000:
+    if GCCPLUGINS_API_VERSION < 5000:
         getsettable.add_gsdef('loc',
                               'PyGccRtl_get_location',
                               None,

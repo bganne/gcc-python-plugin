@@ -70,16 +70,17 @@ GENERATED_HEADERS:= \
   gcc-type.h \
   gcc-variable.h
 
-GCCPLUGINS_DIR:= $(shell $(CC) --print-file-name=plugin)
+GCCPLUGINS_DIR= $(shell $(CC) --print-file-name=plugin)
+GCCPLUGINS_API_VERSION=GCC_VERSION
 
 LIBGCC_C_API_SO	:= libgcc-c-api.so
 
-CPPFLAGS+= -I$(GCCPLUGINS_DIR)/include -I$(GCCPLUGINS_DIR)/include/c-family -I.
+CPPFLAGS+= -I$(GCCPLUGINS_DIR)/include -I$(GCCPLUGINS_DIR)/include/c-family -I. -DGCCPLUGINS_API_VERSION=$(GCCPLUGINS_API_VERSION)
 # Allow user to pick optimization, choose whether warnings are fatal,
 # and choose debugging information level.
 CFLAGS?=-O2 -Werror -g
 # Force these settings
-CFLAGS+= -fPIC -fno-strict-aliasing -Wall
+override CFLAGS:=$(CFLAGS) -fPIC -fno-strict-aliasing -Wall
 
 all: $(LIBGCC_C_API_SO)
 

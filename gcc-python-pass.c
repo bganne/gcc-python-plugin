@@ -24,7 +24,7 @@
 #include "function.h"
 #include "gcc-c-api/gcc-function.h"
 #include "gcc-c-api/gcc-location.h"
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 #include "context.h"
 #include "pass_manager.h"
 #endif
@@ -179,13 +179,13 @@ static unsigned int impl_execute(struct function *fun)
     return 0;
 }
 
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 /*
   GCC 4.9 converted passes to a C++ class hierarchy, with methods for gate
   and execute.
 */
 
-#if (GCC_VERSION >= 5000)
+#if (GCCPLUGINS_API_VERSION >= 5000)
 /* GCC 5 added a "fun" param to the "gate" and "execute" vfuncs of
    pass opt_pass.  */
 # define PASS_DECLARE_GATE_AND_EXECUTE                                  \
@@ -196,7 +196,7 @@ static unsigned int impl_execute(struct function *fun)
 # define PASS_DECLARE_GATE_AND_EXECUTE                            \
     bool gate () { return impl_gate(cfun); }                      \
     unsigned int execute () { return impl_execute(cfun); }
-#endif /* #if (GCC_VERSION >= 5000) */
+#endif /* #if (GCCPLUGINS_API_VERSION >= 5000) */
 
 class PyGccGimplePass : public gimple_opt_pass
 {
@@ -255,7 +255,7 @@ public:
   opt_pass *clone() {return this; }
 };
 
-#else /* #if (GCC_VERSION >= 4009) */
+#else /* #if (GCCPLUGINS_API_VERSION >= 4009) */
 /*
   Before GCC 4.9, passes were implemented using callback functions.
 */
@@ -268,7 +268,7 @@ static unsigned int execute_cb(void)
 {
     return impl_execute(cfun);
 }
-#endif /* #else clause of if (GCC_VERSION >= 4009) */
+#endif /* #else clause of if (GCCPLUGINS_API_VERSION >= 4009) */
 
 static int
 do_pass_init(PyObject *s, PyObject *args, PyObject *kwargs,
@@ -292,12 +292,12 @@ do_pass_init(PyObject *s, PyObject *args, PyObject *kwargs,
         return -1;
     }
 
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
     pass_data pass_data;
     memset(&pass_data, 0, sizeof(pass_data));
     pass_data.type = pass_type;
     pass_data.name = PyGcc_strdup(name);
-#if (GCC_VERSION < 5000)
+#if (GCCPLUGINS_API_VERSION < 5000)
     pass_data.has_gate = true;
     pass_data.has_execute = true;
 #endif
@@ -317,7 +317,7 @@ do_pass_init(PyObject *s, PyObject *args, PyObject *kwargs,
       default:
           gcc_unreachable();
     }
-#else /* #if (GCC_VERSION >= 4009) */
+#else /* #if (GCCPLUGINS_API_VERSION >= 4009) */
     pass = (struct opt_pass*)PyMem_Malloc(sizeof_pass);
     if (!pass) {
         return -1;
@@ -337,7 +337,7 @@ do_pass_init(PyObject *s, PyObject *args, PyObject *kwargs,
 
     pass->gate = gate_cb;
     pass->execute = execute_cb;
-#endif /* ending the #else clause of #if (GCC_VERSION >= 4009) */
+#endif /* ending the #else clause of #if (GCCPLUGINS_API_VERSION >= 4009) */
 
     if (PyGcc_insert_new_wrapper_into_cache(&pass_wrapper_cache,
                                                  pass,
@@ -391,7 +391,7 @@ PyGccPass_repr(struct PyGccPass *self)
                                           self->pass->name);
 }
 
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 static struct dump_file_info *
 get_dump_file_info(int phase)
 {
@@ -410,7 +410,7 @@ get_dump_file_info(int phase)
 static bool
 is_dump_enabled(struct opt_pass *pass)
 {
-#if (GCC_VERSION >= 4008)
+#if (GCCPLUGINS_API_VERSION >= 4008)
     struct dump_file_info *dfi = get_dump_file_info(pass->static_pass_number);
     return dfi->pstate || dfi->alt_state;
 #else
@@ -425,7 +425,7 @@ PyGccPass_get_dump_enabled(struct PyGccPass *self, void *closure)
 }
 
 /* In GCC 4.8, this field became "pstate" */
-#if (GCC_VERSION >= 4008)
+#if (GCCPLUGINS_API_VERSION >= 4008)
   #define DFI_STATE(dfi) (dfi)->pstate
 #else
   #define DFI_STATE(dfi) (dfi)->state
@@ -481,7 +481,7 @@ PyGccPass_set_dump_enabled(struct PyGccPass *self, PyObject *value, void *closur
 
 /* In GCC 4.9, passes moved from being globals to fields of the
    pass_manager.  */
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 #define GET_PASS_LIST(PASS_NAME) (g->get_passes()->PASS_NAME)
 #else
 #define GET_PASS_LIST(PASS_NAME) (PASS_NAME)
@@ -513,7 +513,7 @@ PyGccPass_get_roots(PyObject *cls, PyObject *noargs)
     SET_PASS(2, all_regular_ipa_passes);
     /* all_late_ipa_passes appeared in r175336 */
     /* r204984 eliminated all_lto_gen_passes */
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
     SET_PASS(3, all_late_ipa_passes);
 #else
     SET_PASS(3, all_lto_gen_passes);
@@ -579,7 +579,7 @@ PyGccPass_get_by_name(PyObject *cls, PyObject *args, PyObject *kwargs)
     SEARCH_WITHIN_LIST(all_regular_ipa_passes);
     /* all_late_ipa_passes appeared in r175336 */
     /* r204984 eliminated all_lto_gen_passes */
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
     SEARCH_WITHIN_LIST(all_late_ipa_passes);
 #else
     SEARCH_WITHIN_LIST(all_lto_gen_passes);

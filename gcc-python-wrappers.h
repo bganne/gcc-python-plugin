@@ -461,7 +461,7 @@ void
 PyGccPrettyPrinter_dealloc(PyObject *obj);
 
 /* gcc-python-rtl.c: */
-#if (GCC_VERSION < 5000)
+#if (GCCPLUGINS_API_VERSION < 5000)
 PyObject *
 PyGccRtl_get_location(struct PyGccRtl *self, void *closure);
 #endif

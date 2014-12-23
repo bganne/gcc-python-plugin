@@ -33,7 +33,7 @@
 #define GCC_IMPLEMENT_PUBLIC_API(RETURN_TYPE) RETURN_TYPE
 #define GCC_IMPLEMENT_PRIVATE_API(RETURN_TYPE) RETURN_TYPE
 
-#if (GCC_VERSION >= 5000)
+#if (GCCPLUGINS_API_VERSION >= 5000)
 #define AS_A_GASM(STMT) (as_a <gasm *> (STMT))
 #define AS_A_GCOND(STMT) (as_a <gcond *> (STMT))
 #define AS_A_GLABEL(STMT) (as_a <glabel *> (STMT))

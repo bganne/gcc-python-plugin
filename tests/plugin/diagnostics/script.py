@@ -38,7 +38,7 @@ def on_pass_execution(p, fn):
         # Verify that -Wno-format was honored
         # The behavior of these flags changed in 4.8, so skip this part
         # on gcc 4.8 onwards:
-        if gcc.GCC_VERSION <= 4007:
+        if gcc.GCCPLUGINS_API_VERSION <= 4007:
             gcc.warning(fn.end,
                         'this warning ought not to appear',
                         gcc.Option('-Wformat'))

@@ -24,12 +24,12 @@
 #include "rtl.h"
 #include "gcc-c-api/gcc-rtl.h"
 
-#if (GCC_VERSION < 5000)
+#if (GCCPLUGINS_API_VERSION < 5000)
 PyObject *
 PyGccRtl_get_location(struct PyGccRtl *self, void *closure)
 {
     /* In gcc 4.8, INSN_LOCATOR was replaced by INSN_LOCATION (in r191494) */
-#if (GCC_VERSION >= 4008)
+#if (GCCPLUGINS_API_VERSION >= 4008)
     return PyGccLocation_New(gcc_private_make_location(INSN_LOCATION(self->insn.inner)));
 #else
     int locator = INSN_LOCATOR (self->insn.inner);

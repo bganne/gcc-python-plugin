@@ -34,7 +34,7 @@ def get_gcc_version():
     out, err = p.communicate()
     return(int(out))
 
-GCC_VERSION = get_gcc_version()
+GCCPLUGINS_API_VERSION = get_gcc_version()
 
 class ExpectedErrorNotFound(CompilationError):
     def __init__(self, expected_err, actual_err, bm):
@@ -69,7 +69,7 @@ class AnalyzerTests(unittest.TestCase):
         # followed by another line showing a caret indicating column.
         # This is a great usability feature, but totally breaks our "gold"
         # output, so turn it off for running tests:
-        if GCC_VERSION >= 4008:
+        if GCCPLUGINS_API_VERSION >= 4008:
             extra_cflags += ['-fno-diagnostics-show-caret']
 
         bm.compile_src(extra_cflags)
@@ -90,14 +90,14 @@ class AnalyzerTests(unittest.TestCase):
         return bm
 
     def assertFindsError(self, src, experr):
-        if GCC_VERSION >= 4009:
+        if GCCPLUGINS_API_VERSION >= 4009:
             experr = experr.replace('$(SRCFILE):12:26:', '$(SRCFILE):12:10:')
             experr = experr.replace('$(SRCFILE):13:25:', '$(SRCFILE):13:9:')
             experr = experr.replace('$(SRCFILE):13:26:', '$(SRCFILE):13:10:')
             experr = experr.replace('$(SRCFILE):14:26:', '$(SRCFILE):14:10:')
             experr = experr.replace('$(SRCFILE):14:37:', '$(SRCFILE):14:10:')
             experr = experr.replace('$(SRCFILE):17:26:', '$(SRCFILE):17:10:')
-        if GCC_VERSION >= 5000:
+        if GCCPLUGINS_API_VERSION >= 5000:
             experr = experr.replace('$(SRCFILE):12:5:', '$(SRCFILE):12:12:')
             experr = experr.replace('$(SRCFILE):13:5:', '$(SRCFILE):13:12:')
         if isinstance(src, SimpleModule):

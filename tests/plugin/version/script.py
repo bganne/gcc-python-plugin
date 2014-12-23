@@ -34,5 +34,5 @@ test_version('gcc.get_gcc_version()',
 test_version('gcc.get_plugin_gcc_version()',
              gcc.get_plugin_gcc_version())
 
-assert isinstance(gcc.GCC_VERSION, int)
-assert gcc.GCC_VERSION >= 4006
+assert isinstance(gcc.GCCPLUGINS_API_VERSION, int)
+assert gcc.GCCPLUGINS_API_VERSION >= 4006

@@ -28,14 +28,14 @@
 
 /* for op_symbol_code */
 /* Moved to tree-pretty-print.h in gcc 4.9: */
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 #include "tree-pretty-print.h"
 #else
 #include "tree-flow.h"
 #endif
 
 /* "maybe_get_identifier" was moved from tree.h to stringpool.h in 4.9 */
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
 #include "stringpool.h" /* for maybe_get_identifier */
 #endif
 
@@ -341,7 +341,7 @@ PyGccFunctionDecl_get_callgraph_node(struct PyGccTree *self, void *closure)
 {
     /* cgraph_get_node became cgraph_node::get in 5.0 */
     struct cgraph_node *node;
-#if (GCC_VERSION >= 5000)
+#if (GCCPLUGINS_API_VERSION >= 5000)
     node = cgraph_node::get(self->t.inner);
 #else
     node = cgraph_get_node(self->t.inner);
@@ -485,7 +485,7 @@ PyGccType_get_sizeof(struct PyGccTree *self, void *closure)
       c_sizeof_or_alignof_type wants a location; we use a fake one
     */
     tree t_sizeof = c_sizeof_or_alignof_type(input_location, self->t.inner, true,
-#if (GCC_VERSION >= 4009)
+#if (GCCPLUGINS_API_VERSION >= 4009)
                                              false,
 #endif
                                              0);
@@ -669,7 +669,7 @@ PyObject *
 PyGcc_int_from_int_cst(tree int_cst)
 {
     tree type = TREE_TYPE(int_cst);
-#if (GCC_VERSION >= 5000)
+#if (GCCPLUGINS_API_VERSION >= 5000)
     char buf[WIDE_INT_PRINT_BUFFER_SIZE];
     print_dec(int_cst, buf, TYPE_SIGN (type));
     return PyGcc_int_from_decimal_string_buffer(buf);
@@ -689,7 +689,7 @@ PyObject *
 PyGccIntegerConstant_repr(struct PyGccTree * self)
 {
     tree type = TREE_TYPE(self->t.inner);
-#if (GCC_VERSION >= 5000)
+#if (GCCPLUGINS_API_VERSION >= 5000)
     char buf[WIDE_INT_PRINT_BUFFER_SIZE];
     print_dec(self->t.inner, buf, TYPE_SIGN (type));
 #else
@@ -1184,7 +1184,7 @@ gcc_tree_list_of_pairs_from_tree_list_chain(tree t)
 
 PyObject *
 VEC_tree_as_PyList(
-#if (GCC_VERSION >= 4008)
+#if (GCCPLUGINS_API_VERSION >= 4008)
     vec<tree, va_gc> *vec_nodes
 #else
     VEC(tree,gc) *vec_nodes

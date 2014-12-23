@@ -94,6 +94,24 @@ can see the API by running::
 from within a script.
 
 
+Cross-compiling to target a different GCC
+-----------------------------------------
+You can build a plugin using one GCC for another GCC, eg. because you want
+to target a different version, or because you are cross-compiling for
+another platform.
+
+To do that you can override the `GCCPLUGINS_DIR` and `GCCPLUGINS_API_VERSION`
+make variables to set the plugin API headers path and API version (ie target
+GCC version) of your target. For example::
+
+    make plugin \
+         GCCPLUGINS_DIR=$(/usr/local/k1tools/bin/k1-nodeos-gcc --print-file-name=plugin) \
+         GCCPLUGINS_API_VERSION=4009
+
+will use your default compiler (your x86 workstation distro compiler) to build
+a plugin usable with the Kalray MPPA cross-compiler.
+
+
 Overview of the code
 --------------------
 This is currently three projects in one:

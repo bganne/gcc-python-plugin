@@ -21,6 +21,6 @@
 
 int main(int argc, const char *argv[])
 {
-  printf("%i\n", GCC_VERSION);
+  printf("%i\n", GCCPLUGINS_API_VERSION);
   return 0;
 }

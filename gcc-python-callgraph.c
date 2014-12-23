@@ -174,7 +174,7 @@ PyGcc_get_callgraph_nodes(PyObject *self, PyObject *args)
     /* For debugging, see GCC's dump of things: */
     if (0) {
         fprintf(stderr, "----------------BEGIN----------------\n");
-#if (GCC_VERSION >= 5000)
+#if (GCCPLUGINS_API_VERSION >= 5000)
         cgraph_node::dump_cgraph (stderr);
 #else
         dump_cgraph (stderr);
