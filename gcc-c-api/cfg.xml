@@ -53,4 +53,13 @@
     <attribute name="is_eh" kind="bool"/>
   </type>
 
+  <function name="cfg_block_empty_gimple" returntype="bool">
+    <parameter name="block" type="cfg_block"/>
+  </function>
+
+  <function name="cfg_block_push_gimple" returntype="bool">
+    <parameter name="block" type="cfg_block"/>
+    <parameter name="stmt" type="gimple"/>
+  </function>
+
 </api>

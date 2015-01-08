@@ -100,7 +100,7 @@ def generate_basic_block():
                                                 'The list of successor gcc.Edge instances leading out of this block'),
                                     PyGetSetDef('gimple',
                                                 'PyGccBasicBlock_get_gimple',
-                                                None,
+                                                'PyGccBasicBlock_set_gimple',
                                                 'The list of gcc.Gimple instructions, if appropriate for this pass, or None'),
                                     PyGetSetDef('phi_nodes',
                                                 'PyGccBasicBlock_get_phi_nodes',

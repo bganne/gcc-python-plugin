@@ -132,6 +132,32 @@ PyGccBasicBlock_get_gimple(PyGccBasicBlock *self, void *closure)
                     append_gimple_to_list)
 }
 
+int
+PyGccBasicBlock_set_gimple(PyGccBasicBlock *self, PyObject *seq, void *closure)
+{
+    assert(self);
+    assert(self->bb.inner);
+    assert(seq);
+
+    Py_ssize_t size = PySequence_Size(seq);
+    if (size < 0) return -1;
+
+    bool res = gcc_cfg_block_empty_gimple(self->bb);
+    if (!res) return -1;
+
+    Py_ssize_t i;
+    for (i=0; i<size; i++)
+      {
+        PyObject *item = PySequence_GetItem(seq, i);
+        if (!item) return -1;
+        PyGccGimple *gimple = (PyGccGimple *)item;
+        gcc_cfg_block_push_gimple(self->bb, gimple->stmt);
+        Py_DECREF(item);
+      }
+
+    return 0;
+}
+
 static PyObject*
 PyGccGimple_New_phi(gcc_gimple_phi phi)
 {

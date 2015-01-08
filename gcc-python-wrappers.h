@@ -157,6 +157,9 @@ PyGccBasicBlock_get_succs(PyGccBasicBlock *self, void *closure);
 PyObject *
 PyGccBasicBlock_get_gimple(PyGccBasicBlock *self, void *closure);
 
+int
+PyGccBasicBlock_set_gimple(PyGccBasicBlock *self, PyObject *seq, void *closure);
+
 PyObject *
 PyGccBasicBlock_get_phi_nodes(PyGccBasicBlock *self, void *closure);
 

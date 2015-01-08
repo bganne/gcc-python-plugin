@@ -242,6 +242,45 @@ gcc_cfg_block_for_each_gimple (gcc_cfg_block block,
 }
 
 GCC_IMPLEMENT_PUBLIC_API (bool)
+gcc_cfg_block_empty_gimple (gcc_cfg_block block)
+{
+  gimple_stmt_iterator gsi;
+  struct gimple_bb_info *info;
+
+  info = checked_get_gimple_info(block);
+
+  if (NULL == info)
+    {
+      return false;
+    }
+
+  for (gsi = gsi_start (info->seq);
+       !gsi_end_p (gsi); /* gsi_remove() will move to next statement */ )
+    {
+      gsi_remove (&gsi, true);
+    }
+
+  return true;
+}
+
+GCC_IMPLEMENT_PUBLIC_API (bool)
+gcc_cfg_block_push_gimple (gcc_cfg_block block, gcc_gimple stmt)
+{
+  struct gimple_bb_info *info;
+
+  info = checked_get_gimple_info(block);
+
+  if (NULL == info)
+    {
+      return false;
+    }
+
+  gimple_seq_add_stmt (&info->seq, stmt.inner);
+
+  return true;
+}
+
+GCC_IMPLEMENT_PUBLIC_API (bool)
 gcc_cfg_block_for_each_rtl_insn (gcc_cfg_block block,
 				 bool (*cb) (gcc_rtl_insn insn,
 					     void *user_data),
