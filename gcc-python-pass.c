@@ -21,6 +21,7 @@
 #include "gcc-python.h"
 #include "gcc-python-wrappers.h"
 #include "diagnostic.h"
+#include "function.h"
 #include "gcc-c-api/gcc-function.h"
 #include "gcc-c-api/gcc-location.h"
 #if (GCC_VERSION >= 4009)
@@ -42,7 +43,7 @@
 */
 static PyObject *pass_wrapper_cache = NULL;
 
-static bool impl_gate(function *fun)
+static bool impl_gate(struct function *fun)
 {
     PyObject *pass_obj;
     PyObject *cfun_obj = NULL;
@@ -107,7 +108,7 @@ static bool impl_gate(function *fun)
     return result;
 }
 
-static unsigned int impl_execute(function *fun)
+static unsigned int impl_execute(struct function *fun)
 {
     PyObject *pass_obj;
     PyObject *cfun_obj = NULL;
